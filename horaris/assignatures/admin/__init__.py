@@ -1,0 +1,2 @@
+from .assignatura import AssignaturaAdmin
+from .resultat_aprenentatge import ResultatAprenentatgeAdmin
