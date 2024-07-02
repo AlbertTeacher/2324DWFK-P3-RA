@@ -2,6 +2,8 @@ from datetime import timedelta
 
 from django.db import models
 
+from .dia_de_festa import DiaDeFesta
+
 
 SATURDAY = 5
 DAYS_PER_WEEK = 7
@@ -12,6 +14,7 @@ class Assignatura(models.Model):
     nom = models.CharField(max_length=100)
     hores_dedicacio = models.PositiveIntegerField()
     data_inici = models.DateField()
+    dies_de_festa = models.ManyToManyField(DiaDeFesta, blank=True)
 
     def __str__(self):
         return self.nom
@@ -28,7 +31,7 @@ class Assignatura(models.Model):
             current_date = start_date
             while days > 0:
                 current_date += timedelta(days=1)
-                if current_date.weekday() < SATURDAY:
+                if current_date.weekday() < SATURDAY and not self.dies_de_festa.filter(data=current_date).exists():
                     days -= 1
             return current_date
 

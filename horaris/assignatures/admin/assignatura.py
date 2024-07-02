@@ -8,6 +8,7 @@ from ..models.assignatura import Assignatura
 class AssignaturaAdmin(admin.ModelAdmin):
     list_display = ('nom', 'hores_dedicacio', 'data_inici', 'hores_setmanals', 'mostrar_resultats')
     list_editable = ('data_inici',)
+    filter_horizontal = ('dies_de_festa',)
     inlines = [ResultatAprenentatgeInline]
 
     def hores_setmanals(self, obj):
