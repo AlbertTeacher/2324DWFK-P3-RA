@@ -35,10 +35,23 @@ class Assignatura(models.Model):
         resultats = self.resultats_aprenentatge.all()
         data_actual = self.data_inici
         resultats_setmanes = []
+
+        hores_restants_setmana = self.hores_setmanals()
         
         for resultat in resultats:
-            setmanes = resultat.hores / self.hores_setmanals()
-            dies = int(setmanes * 5)
+            hores_restants_resultat = resultat.hores
+            dies = 0
+
+            while hores_restants_resultat > 0:
+                if hores_restants_resultat <= hores_restants_setmana:
+                    hores_restants_setmana -= hores_restants_resultat
+                    dies += int(hores_restants_resultat / self.hores_setmanals())
+                    hores_restants_resultat = 0
+                else:
+                    hores_restants_resultat -= hores_restants_setmana
+                    dies += 5
+                    hores_restants_setmana = self.hores_setmanals()
+
             data_fi = add_weekdays(data_actual, dies)
             resultats_setmanes.append((resultat, self.troba_dilluns(data_actual), self.troba_dilluns(data_fi)))
             data_actual = data_fi
